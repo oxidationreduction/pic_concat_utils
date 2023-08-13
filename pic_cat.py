@@ -3,6 +3,7 @@ import shutil
 import sys
 import threading
 import glob
+from datetime import datetime, timedelta
 
 from PIL import Image
 from multiprocessing import Process
@@ -128,7 +129,7 @@ def pic_cat(args: argparse.Namespace):
     results_dirs = []
     args.base_dir = os.path.abspath(args.base_dir)
     if args.all:
-        
+        days_ago = datetime.now().date() + timedelta(days=int(args.from_date))
         for model in os.listdir(args.base_dir):
             if model in [".DS_Store", "united_results"] or not os.path.isdir(os.path.join(args.base_dir, model)):
                 continue
@@ -146,6 +147,10 @@ def pic_cat(args: argparse.Namespace):
                 if album in ["results", "logs", "checkpoints"]:
                     continue
                 album_dir = os.path.join(model_dir, album)
+                if datetime.fromtimestamp(os.path.getctime(album_dir)) < days_ago:
+                    print_warning(f"Skip {album_dir} for {datetime.fromtimestamp(os.path.getctime(album_dir))} "
+                                  f"early than {days_ago}")
+                    continue
                 if os.path.isdir(album_dir) and "name" in os.listdir(album_dir):
                     if args.reset or (not args.reset and "processed" not in album_dir):
                         work_dirs.append(album_dir)

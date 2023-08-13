@@ -23,7 +23,7 @@ def main():
     parser.add_argument('--from_date', help='a zero or negative integer indicates the number of days before today, '
                                             'e.g. 0 means only apply to files added today, '
                                             '-1 means only apply to files added after yesterday (included)',
-                        default=days_since(1970, 1, 1), type=int)
+                        default=-days_since(2000, 1, 1), type=int)
     args = parser.parse_args()
 
     if args.add:
