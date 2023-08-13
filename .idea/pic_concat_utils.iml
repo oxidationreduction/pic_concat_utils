@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/arisa_komiya" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/hikaru_oosawa" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/himena_tsukimiya" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/hinako_sano" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/hinami_mori" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/ichika_osaki" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/kaoru_yasui" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/kasumi_arimura" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/kazusa_okuyama" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/kohaku_shida" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/liyuu" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/mei_angela" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/miki_yanagi" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/mikie_hara" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/miyu_kitamuki" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/miyu_murashima" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/mizuki_saiba" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/nao_nagasawa" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/nashiko_momotsuki" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/nene_shida" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/noa_tsurugashima" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/non" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/otu_abe" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/riho_takeda" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/riho_yoshioka" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/rina_akiyama" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/rina_onuki" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/runa_toyota" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/sakurako_ookubo" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/united_results" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yoshika_kato" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yuka_kohinata" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yukari_taki" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yuna_hoshino" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yuria_haga" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yurina_yanagi" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/yuuki_yoda" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
