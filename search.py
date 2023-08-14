@@ -10,7 +10,7 @@ def _search_album(album_name: str, BASE_DIR: str):
     results = []
     for dir in os.listdir(BASE_DIR):
         # For macOS
-        if dir == ".DS_Store":
+        if dir in [".DS_Store", "united_results"] or not os.path.isdir(os.path.join(BASE_DIR, dir)):
             continue
         try:
             with open(os.path.join(BASE_DIR, dir, "name"), "r") as f:
@@ -23,6 +23,8 @@ def _search_album(album_name: str, BASE_DIR: str):
 
 
 def search(args: argparse.Namespace):
+    if args.album is None:
+        args.album = ''
     album_name = standardize_album_name(args.album)
     BASE_DIR = args.base_dir
 

@@ -12,7 +12,15 @@ def add(args: argparse.Namespace):
     BASE_DIR = args.base_dir
 
     if model not in os.listdir(BASE_DIR):
-        os.mkdir(os.path.join(BASE_DIR, model))
+        model_dir = os.path.join(BASE_DIR, model)
+        os.mkdir(model_dir)
+        mkdir_if_not_exist(os.path.join(model_dir, 'results'))
+        result_dirs = [
+            os.path.join(model_dir, 'results', 'high_quality'),
+            os.path.join(model_dir, 'results', 'mid_quality'),
+            os.path.join(model_dir, 'results', 'low_quality')
+        ]
+        mkdir_if_not_exist(result_dirs)
         print("Model created:", model)
     else:
         print_warning(f"Model already exist, override: {model}")

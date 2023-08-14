@@ -53,10 +53,9 @@ def single_thread(img1, img1name, img2, img2name, album_dir, count, pbar, thresh
 
 
 def remove_pics(model: str, album: str, result_dirs: Union[list[str], tuple[str]]):
-    def _remove_pics_single_dir(result_dir: str):
-        for filename in glob.glob(os.path.join(result_dir, f'{model}_{album}*')):
+    def _remove_pics_single_dir(result_dir0: str):
+        for filename in glob.glob(os.path.join(result_dir0, f'{model}_{album}*')):
             try:
-                # 删除文件
                 os.remove(filename)
             except OSError as e:
                 print(f'Error: {filename} : {e.strerror}')
@@ -100,7 +99,10 @@ def pic_concat(album_dir: str,
         remove_pics(model, album, result_dirs)
         images = [img for img in os.listdir(album_dir) if img.endswith((".jpg", ".jpeg", ".png"))]
         images.sort()
-        assert len(images) % 2 == 0
+        try:
+            assert len(images) % 2 == 0
+        except AssertionError:
+            raise AssertionError(f"Odd number of pictures in {album_dir}: {len(images)}")
 
         with tqdm(total=len(images) >> 1, leave=False) as pbar:
             pbar.set_description_str(f'Concat {model}/{album}')
@@ -129,7 +131,7 @@ def pic_cat(args: argparse.Namespace):
     results_dirs = []
     args.base_dir = os.path.abspath(args.base_dir)
     if args.all:
-        days_ago = datetime.now().date() + timedelta(days=int(args.from_date))
+        days_ago = date.today() + timedelta(days=int(args.from_date))
         for model in os.listdir(args.base_dir):
             if model in [".DS_Store", "united_results"] or not os.path.isdir(os.path.join(args.base_dir, model)):
                 continue
@@ -141,14 +143,15 @@ def pic_cat(args: argparse.Namespace):
                 os.path.join(model_dir, 'results', 'low_quality')
             ]
             mkdir_if_not_exist(result_dirs, args.reset)
+            rm_pic_model_album(result_dirs, model)
             for album in os.listdir(model_dir):
                 if not os.path.isdir(os.path.join(model_dir, album)):
                     continue
                 if album in ["results", "logs", "checkpoints"]:
                     continue
                 album_dir = os.path.join(model_dir, album)
-                if datetime.fromtimestamp(os.path.getctime(album_dir)) < days_ago:
-                    print_warning(f"Skip {album_dir} for {datetime.fromtimestamp(os.path.getctime(album_dir))} "
+                if datetime.fromtimestamp(os.path.getctime(album_dir)).date() < days_ago:
+                    print_warning(f"Skip {album_dir} for {datetime.fromtimestamp(os.path.getctime(album_dir)).date()} "
                                   f"early than {days_ago}")
                     continue
                 if os.path.isdir(album_dir) and "name" in os.listdir(album_dir):
@@ -161,7 +164,7 @@ def pic_cat(args: argparse.Namespace):
                 pic_concat(album_dir, result_dirs, args.threshold)
                 pbar.update(1)
             pbar.close()
-    else:
+    elif args.dirs is not None:
         work_dirs = args.dirs
         for album_dir in work_dirs:
             if not os.path.isdir(album_dir):
@@ -175,4 +178,45 @@ def pic_cat(args: argparse.Namespace):
                 os.path.join(model_dir, 'results', 'mid_quality'),
                 os.path.join(model_dir, 'results', 'low_quality')
             ]
+            mkdir_if_not_exist(result_dirs, args.reset)
+            model, album = get_model_album_from_path(album_dir)
+            rm_pic_model_album(result_dirs, model, album)
             pic_concat(album_dir, result_dirs, args.threshold)
+    else:
+        model, album = args.model, args.album
+
+        def _concat_for_single_model(model0: str, album0: str = None):
+            model_dir0 = os.path.join(args.base_dir, model0)
+            result_dirs0 = [
+                os.path.join(model_dir0, 'results', 'high_quality'),
+                os.path.join(model_dir0, 'results', 'mid_quality'),
+                os.path.join(model_dir0, 'results', 'low_quality')
+            ]
+
+            if album0 is not None:
+                for album_dir_name in os.listdir(model_dir0):
+                    if album0 in [album_dir_name, get_album_real_name(os.path.join(model_dir0, album_dir_name))]:
+                        rm_pic_model_album(result_dirs0, model0, album_dir_name)
+                        pic_concat(os.path.join(model_dir0, album_dir_name), result_dirs0, args.threshold)
+                        break
+            else:
+                for album_dir_name in os.listdir(model_dir0):
+                    rm_pic_model_album(result_dirs0, model0, album_dir_name)
+                    pic_concat(os.path.join(model_dir0, album_dir_name), result_dirs0, args.threshhold)
+
+        if model is not None:
+            _concat_for_single_model(model, album)
+        else:
+            if album is not None:
+                for model in os.listdir(args.base_dir):
+                    if not os.path.isdir(os.path.join(args.base_dir, model)) or model == "united_results":
+                        continue
+                    if album in os.listdir(os.path.join(args.base_dir, model)).extend(
+                            [get_album_real_name(os.path.join(args.base_dir, model, album_name))
+                             for album_name in os.listdir(os.path.join(args.base_dir, model))]):
+                        _concat_for_single_model(model, album)
+            else:
+                raise RuntimeError("If you don't use --all or --dirs for --concat, then --model and --album cannot be "
+                                   "None at the same time")
+
+

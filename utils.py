@@ -1,7 +1,9 @@
+import glob
+import subprocess
 import threading
 import warnings
 import os
-from datetime import date
+from datetime import datetime, date
 from typing import Union
 
 from PIL import Image
@@ -9,7 +11,7 @@ from PIL import Image
 
 def print_warning(message: str):
     warnings.formatwarning = lambda message, category, filename, lineno, line="": \
-        '\033[91m' + category.__name__ + ': ' + str(message) + '\033[0m'
+        '\033[91m' + category.__name__ + ': ' + str(message) + '\n\033[0m'
     warnings.warn(message, UserWarning)
 
 
@@ -22,7 +24,7 @@ def standardize_model_name(album_name: str) -> str:
     return album_name.replace(" ", "_").replace("　", "_").lower()
 
 
-def mkdir_if_not_exist(path: Union[str, tuple[str], list[str]], cleanup_exist: bool = False):
+def mkdir_if_not_exist(path: Union[str, tuple[str], list[str]], cleanup_exist: bool = True):
     if isinstance(path, str):
         path = (path,)
     for p in path:
@@ -37,8 +39,43 @@ def mkdir_if_not_exist(path: Union[str, tuple[str], list[str]], cleanup_exist: b
                         raise PermissionError(f"Permission denied: {os.path.join(p, file)}")
 
 
+def rm_pic_model_album(path: Union[str, tuple[str], list[str]],
+                       model: str = None, album: Union[int, str] = None):
+    if isinstance(path, str):
+        path = [path]
+
+    def _rm_pic_model_album(path0: str):
+        if model is None:
+            path0 = os.path.join(path0, "*")
+        elif album is None:
+            path0 = os.path.join(path0, f"{model}*")
+        else:
+            path0 = os.path.join(path0, f"{model}_{album}*")
+        for file in glob.glob(path0):
+            os.remove(file)
+
+    for path_0 in path:
+        _rm_pic_model_album(path_0)
+
+
+def get_creation_time(path):
+    p = subprocess.Popen(['stat', '-f%B', path],
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if p.wait():
+        raise OSError(p.stderr.read().rstrip())
+    else:
+        return int(p.stdout.read())
+
+
 def generate_file_name(model: str, album: str, index: Union[int, str]) -> str:
-    return f"{model}_{album}_{format_count_idx(index)}.png"
+    return f"{model}_{album.split('_')[0]}_{format_count_idx(index)}.png"
+
+
+def get_model_album_from_path(path: str) -> (str, str):
+    path = os.path.abspath(path)
+    model = os.path.dirname(path)
+    album = os.path.dirname(os.path.join(path, "name"))
+    return model, album
 
 
 def is_image(file_name: str) -> bool:
@@ -85,3 +122,16 @@ def days_since(year: int, month: int, day: int) -> int:
     today = date.today()
     delta = today - start_date
     return delta.days
+
+
+def get_album_real_name(album_path: str):
+    try:
+        with open(os.path.join(album_path, "name")) as f:
+            return f.readline().replace("\n", "")
+    except FileNotFoundError:
+        return ""
+
+
+if __name__ == '__main__':
+    ctime = get_creation_time(os.path.join("pic_concat", "liyuu", "1_reverse_processed"))
+    print(date.fromtimestamp(ctime))
