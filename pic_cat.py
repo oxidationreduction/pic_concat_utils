@@ -100,7 +100,7 @@ def pic_concat(album_dir: str,
         images = [img for img in os.listdir(album_dir) if img.endswith((".jpg", ".jpeg", ".png"))]
         images.sort()
         try:
-            assert len(images) % 2 == 0
+            assert (len(images) & 1) == 0
         except AssertionError:
             raise AssertionError(f"Odd number of pictures in {album_dir}: {len(images)}")
 
@@ -143,7 +143,8 @@ def pic_cat(args: argparse.Namespace):
                 os.path.join(model_dir, 'results', 'low_quality')
             ]
             mkdir_if_not_exist(result_dirs, args.reset)
-            rm_pic_model_album(result_dirs, model)
+            if args.reset:
+                rm_pic_model_album(result_dirs, model)
             for album in os.listdir(model_dir):
                 if not os.path.isdir(os.path.join(model_dir, album)):
                     continue
