@@ -1,4 +1,5 @@
 import glob
+import shutil
 import subprocess
 import threading
 import warnings
@@ -130,6 +131,13 @@ def get_album_real_name(album_path: str):
             return f.readline().replace("\n", "")
     except FileNotFoundError:
         return ""
+
+
+def safe_copy(src, dst):
+    if os.path.exists(dst):
+        # print(f"Target file {dst} already exists. Skipping copy operation.")
+        return
+    shutil.copy(src, dst)
 
 
 if __name__ == '__main__':

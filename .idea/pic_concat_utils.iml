@@ -45,6 +45,8 @@
       <excludeFolder url="file://$MODULE_DIR$/pic_concat/masako_umemiya" />
       <excludeFolder url="file://$MODULE_DIR$/pic_concat/riko_matsudaira" />
       <excludeFolder url="file://$MODULE_DIR$/pic_concat/rio_uchida" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat" />
+      <excludeFolder url="file://$MODULE_DIR$/pic_concat/sayaka_tomaru" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

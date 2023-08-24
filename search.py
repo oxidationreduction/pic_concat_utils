@@ -25,6 +25,7 @@ def _search_album(album_name: str, BASE_DIR: str):
 def search(args: argparse.Namespace):
     if args.album is None:
         args.album = ''
+
     album_name = standardize_album_name(args.album)
     BASE_DIR = args.base_dir
 

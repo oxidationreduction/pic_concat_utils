@@ -16,7 +16,8 @@ def main():
     parser.add_argument('--all', help='include all dirs', default=False, action='store_true')
     parser.add_argument('--dirs', help='dirs to concat', nargs='+', default=None)
     parser.add_argument('--reset', help='override processed dirs, re-process all pics', default=False, action='store_true')
-    parser.add_argument('--base_dir', help='base directory of all pictures', default='pic_concat')
+    parser.add_argument('--base_dir', help='base directory of all pictures',
+                        default='pic_concat')
     parser.add_argument('--unite', help='copy all processed results to one dir', default=False, action='store_true')
     parser.add_argument('--threshold', help='height threshold of high and mid qualities (in pixel)',
                         default=[1600, 1080], type=float)
@@ -32,8 +33,8 @@ def main():
         search(args)
     elif args.concat:
         pic_cat(args)
-    else:
-        raise RuntimeError(f"Undefined function, only allow 'add', 'search' and 'concat'")
+    # else:
+    #     raise RuntimeError(f"Undefined function, only allow 'add', 'search' and 'concat'")
 
     if args.unite:
         unite_files(args)

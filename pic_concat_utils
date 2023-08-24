@@ -1,0 +1,3 @@
+#!/bin/bash
+cd ~/PycharmProjects/pic_concat_utils || exit
+python main.py "$@"
