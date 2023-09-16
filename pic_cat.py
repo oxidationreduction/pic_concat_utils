@@ -82,16 +82,9 @@ def pic_concat(album_dir: str,
         with tqdm(total=len(images), leave=False) as pbar:
             pbar.set_description_str(f'Copy {model}/{album}')
             index = 0
-            lock = threading.Lock()
-            threads = []
             for pic in images:
-                td = threading.Thread(target=save_pic,
-                                      args=(os.path.join(album_dir, pic), model, album, index,
-                                            threshold, result_dirs, lock))
-                td.start()
-                threads.append(td)
-            for td in threads:
-                td.join()
+                save_pic(Image.open(os.path.join(album_dir, pic)), model, album, index, threshold, result_dirs)
+                index += 1
                 pbar.update(1)
             pbar.close()
     else:
