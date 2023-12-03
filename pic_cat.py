@@ -196,7 +196,7 @@ def pic_cat(args: argparse.Namespace):
             else:
                 for album_dir_name in os.listdir(model_dir0):
                     rm_pic_model_album(result_dirs0, model0, album_dir_name)
-                    pic_concat(os.path.join(model_dir0, album_dir_name), result_dirs0, args.threshhold)
+                    pic_concat(os.path.join(model_dir0, album_dir_name), result_dirs0, args.threshold)
 
         if model is not None:
             _concat_for_single_model(model, album)
